@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /*
@@ -65,7 +66,20 @@ public class IntroToStreams {
                 this.mileage = mileage;
             }
         }
+        String[] words = {"Hello", "what", "should", "I", "write", "here"};
+        Stream<String> stem = Arrays.stream(words);
+        stem.filter((word) -> word.length() > 4).forEach((word) -> System.out.println(""+word));
         
+        
+        
+        
+       String[] str = {"2","7","9","1","5"};
+       Stream<String> f= Arrays.stream(str);
+       
+   
+       Integer[] hello = {1,4,3,2};
+       int sum = Arrays.stream(hello).reduce(0, (acc,next) -> acc+next);
+       System.out.println("SUM SHOULD BE 10, IS"+sum);
         /*
          * How to create streams from different Collections
          */
@@ -161,10 +175,7 @@ public class IntroToStreams {
         System.out.println("\nSum of all ints in list: " + totalMileage);
         System.out.println(intList);
         
-        /*
-         * Scale or convert a stream of elements to another
-         * map((e) -> a new element)
-         */
+        
         List<String> models = carList.stream()
                                       .map((car) -> car.make)
                                       .collect(Collectors.toList());

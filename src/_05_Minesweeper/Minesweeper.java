@@ -2,6 +2,7 @@ package _05_Minesweeper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import processing.core.PApplet;
 
@@ -37,7 +38,6 @@ public class Minesweeper extends PApplet {
     boolean gameInProgress = false;
     int gameTimeSec;
     int nowMs;
-
     /*
      * Game settings
      */
@@ -63,7 +63,7 @@ public class Minesweeper extends PApplet {
      * *Note* This can be done using a for loop, but try to do it with Streams.
      */
     void revealAllCells() {
-        
+        cells.stream().forEach((cell)-> cell.revealed = true );
     }
     
     /*
@@ -76,9 +76,14 @@ public class Minesweeper extends PApplet {
      *  noneMatch() // returns true if no items in the stream match the condition
      */
     boolean checkWin() {
-        return false;
-    }
+    	if(cells.stream().filter((cell)-> cell.mine = false).noneMatch((cell) -> cell.revealed = false)) {
+    	    //true if none of the non-mine cells are set to flagged false(they have all been flagged)
+    		return false;
+    	}
+    	return true;
+             
     
+    }
     /*
      * A cell was clicked and this method needs to:
      * 1. Only do the following steps if the cell is NOT a mine.
@@ -96,7 +101,14 @@ public class Minesweeper extends PApplet {
      *        - - - -
      */
     void revealCell(Cell cell) {
-        
+        if(!cell.mine) {
+        	cell.revealed = true;
+        	if(cell.minesAround == 0) {
+        		List<Cell> neighbors = getNeighbors(cell);
+        		neighbors.stream().filter((r)->r.revealed = false).forEach((cells)-> revealCell(cells));	
+        	}
+
+        }
     }
     
     /*
@@ -111,8 +123,14 @@ public class Minesweeper extends PApplet {
      * 6. Use reduce() or sum() to count the number of 1s, i.e. mines
      */
     void setNumberOfSurroundingMines() {
-        
+    	
+    	cells.stream().forEach((cell)-> cell.minesAround = getNeighbors(cell).stream()
+    			.mapToInt((neighbor)->neighbor.mine ? 1 : 0).sum());
+    			//.filter((neighbor)-> neighbor.mine = true).map((mines)->1));
+    	
     }
+    
+    
     
     @Override
     public void settings() {

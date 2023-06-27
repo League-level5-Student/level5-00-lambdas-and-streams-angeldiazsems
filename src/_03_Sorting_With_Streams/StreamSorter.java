@@ -21,11 +21,13 @@ import org.junit.jupiter.api.Test;
 public class StreamSorter {
 
     int[] sortArray(int[] arr) {
-        return null;
+    	
+        return Arrays.stream(arr).sorted().toArray();
     }
 
     List<String> sortList(List<String> list) {
-        return null;
+    	
+        return list.stream().sorted().collect(Collectors.toList());
     }
     
     // =================== DO NOT MODIFY THE CODE BELOW ======================
